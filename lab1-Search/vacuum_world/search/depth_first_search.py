@@ -29,7 +29,7 @@ class DepthFirstSearch(BaseSearch):
         self.frontier = list()
         self.frontier.append(current_node)
         
-        #Track explored nodes
+        #Track explored nodes for the visualisation tool
         self.explored = []
         
         #reached defined as set of GridPos 

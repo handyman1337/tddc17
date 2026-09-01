@@ -27,7 +27,7 @@ class BreadthFirstSearch(BaseSearch):
         self.frontier = deque()
         self.frontier.append(current_node)
         
-        #Track explored nodes
+        #Track explored nodes for the visualisation tool
         self.explored = []
         
         #reached defined as set of GridPos 
