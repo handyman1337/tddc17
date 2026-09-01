@@ -1,15 +1,17 @@
 from typing import List
-from collections import deque
 from vacuum_world.search.search_node import SearchNode
 from vacuum_world.search.problem import SearchProblem
 from .base_search import BaseSearch
 
 
-class BreadthFirstSearch(BaseSearch):
+class DepthFirstSearch(BaseSearch):
 
     def __init__(self):
         super().__init__()
     
+    #THIS ENTIRE FILE IS LARGELY A COPY OF THE BFS FILE! Only difference is
+    #that we changed deque to list as DFS is same as BFS except that we use
+    #a stack (LIFO queue) instead of FIFO queue.  
     def search(self, problem: SearchProblem) -> List[SearchNode]:
         
         self.path = []
@@ -23,8 +25,8 @@ class BreadthFirstSearch(BaseSearch):
             self.path = current_node.get_path_from_root()
             return self.path
         
-        #frontier defined as FIFO queue
-        self.frontier = deque()
+        #frontier defined as stack
+        self.frontier = list()
         self.frontier.append(current_node)
         
         #Track explored nodes
@@ -47,7 +49,7 @@ class BreadthFirstSearch(BaseSearch):
                 
                 if s_state not in reached:
                     reached.add(s_state)
-                    self.frontier.appendleft(s_node) #appendleft to keep FIFO structure
+                    self.frontier.append(s_node)
                         
         return []
     
