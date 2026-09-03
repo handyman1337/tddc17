@@ -86,19 +86,30 @@ class QLearningController:
         # Exercise 2: Map every action number to an engine activation pattern.
         # Explicitly switch off every engine that the action does not use.
         self.reset_rockets()
+        match action:
+            #case 0 and _: engines off (already done above)
+            case 1: #Middle engine on
+                self.middle_engine.setBursting(True)
+                
+            case 2: #Left engine on
+                self.left_engine.setBursting(True)
+                
+            case 3: #Right engine on
+                self.right_engine.setBursting(True)
+                
 
     def tick(self, current_time):
         """Main decision loop. Called every iteration by the simulator."""
         self.iteration += 1
         
         #TASK 1.2: ADDED PRINT OF VALUES angle, vx, vy
-        #"""
+        """
         print(
             f"angle: {self.angle.getValue():.2f} "
             f"vx: {self.vx.getValue():.2f} "
             f"vy: {self.vy.getValue():.2f}"
         )
-        #"""
+        """
 
         if self.paused:
             return
@@ -112,9 +123,11 @@ class QLearningController:
         )
         
         #TASK 1.3: SWITCH ON MIDDLE ENGINE VERTICAL VELOCITY PASSES THREHSOLD
+        """
         if self.vy.getValue() > 20.0:
             self.middle_engine.setBursting(True)
-
+        """
+        
         # Repeat the chosen action for a while, hoping to reach a new state.
         # This is a trick to speed up learning on this problem.
         self.action_counter += 1
@@ -148,6 +161,12 @@ class QLearningController:
             # Exercise 3: Implement the Q-learning update here. Use
             # previous_reward, alpha(), GAMMA_DISCOUNT_FACTOR, and
             # get_max_action_q_value().
+            
+            #Loop is one step "behind", so we use prev_... for "current" states/actions
+            self.qtable[prev_stateaction] = self.qtable[prev_stateaction] + self.alpha(self.ntable[prev_stateaction]) * (
+                previous_reward + self.GAMMA_DISCOUNT_FACTOR * self.get_max_action_q_value(new_state) - self.qtable[prev_stateaction]
+                )
+            
 
             action = self.select_action(new_state)
             self.perform_action(action)

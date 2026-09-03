@@ -1,13 +1,22 @@
+import math
+
 class StateAndReward:
     """State discretization and reward helpers for the Q-learning controller."""
 
     @staticmethod
     def get_state_angle(angle, vx, vy):
         """State discretization function for the angle controller."""
-
         # Exercise 1a: Discretize the angle and return a unique state.
 
-        state = "angle-state-not-implemented"
+        #TUNE THIS IF NEEDED
+        NR_OF_ANGLE_STATES = 10 #360/10 = 36 deg per discrete angle
+        MAX_ANGLE = math.pi #We use radians since simulator printed radians
+        
+        state = StateAndReward.discretize2(
+            angle,
+            NR_OF_ANGLE_STATES,
+            -MAX_ANGLE,
+            MAX_ANGLE)
 
         return state
 
@@ -17,7 +26,7 @@ class StateAndReward:
 
         # Exercise 1b: Return a reward that favors an upright rocket.
 
-        reward = 0
+        reward = 1 - abs(angle) / math.pi
 
         return reward
 
