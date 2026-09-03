@@ -90,6 +90,15 @@ class QLearningController:
     def tick(self, current_time):
         """Main decision loop. Called every iteration by the simulator."""
         self.iteration += 1
+        
+        #TASK 1.2: ADDED PRINT OF VALUES angle, vx, vy
+        #"""
+        print(
+            f"angle: {self.angle.getValue():.2f} "
+            f"vx: {self.vx.getValue():.2f} "
+            f"vy: {self.vy.getValue():.2f}"
+        )
+        #"""
 
         if self.paused:
             return
@@ -101,6 +110,10 @@ class QLearningController:
             self.vx.getValue(),
             self.vy.getValue(),
         )
+        
+        #TASK 1.3: SWITCH ON MIDDLE ENGINE VERTICAL VELOCITY PASSES THREHSOLD
+        if self.vy.getValue() > 20.0:
+            self.middle_engine.setBursting(True)
 
         # Repeat the chosen action for a while, hoping to reach a new state.
         # This is a trick to speed up learning on this problem.
