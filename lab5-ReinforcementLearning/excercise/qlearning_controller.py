@@ -116,7 +116,7 @@ class QLearningController:
 
         # Exercise 4: Change these angle functions to the hover functions after
         # the angle controller works.
-        new_state = StateAndReward.get_state_angle(
+        new_state = StateAndReward.get_state_hover(
             self.angle.getValue(),
             self.vx.getValue(),
             self.vy.getValue(),
@@ -137,7 +137,8 @@ class QLearningController:
         ):
             return
 
-        previous_reward = StateAndReward.get_reward_angle(
+        #CHANGE THIS AS WELL IF WANTING TO GO BACK TO ANGLE STATE ONLY
+        previous_reward = StateAndReward.get_reward_hover(
             self.previous_angle,
             self.previous_vx,
             self.previous_vy,

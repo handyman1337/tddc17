@@ -35,20 +35,41 @@ class StateAndReward:
         """State discretization function for the full hover controller."""
 
         # Exercise 4a: Build a state from angle, vx, and vy.
-
-        state = "hover-state-not-implemented"
+        #TUNE THESE IF NEEDED
+        NR_OF_ANGLE_STATES = 10 #360/10 = 36 deg per discrete angle
+        NR_OF_VX_STATES = 5 #left / kinda still / right
+        NR_OF_VY_STATES = 5 #heavy up / up / kinda still / down / heavy down
+        MAX_ANGLE = math.pi #We use radians since simulator printed radians
+        MAX_VX = 35.0
+        MAX_VY = 35.0 
+        
+        angle_bin = StateAndReward.discretize2(
+            angle, NR_OF_ANGLE_STATES, -MAX_ANGLE, MAX_ANGLE)
+        
+        #discretize() used instead of discretize2() here because we want under-/overflow bins for velocity
+        vx_bin = StateAndReward.discretize(
+            vx, NR_OF_VX_STATES, -MAX_VX, MAX_VX)
+        
+        vy_bin = StateAndReward.discretize(
+            vy, NR_OF_VY_STATES, -MAX_VY, MAX_VY)
+    
+        state = (angle_bin, vx_bin, vy_bin)
 
         return state
 
     @staticmethod
     def get_reward_hover(angle, vx, vy):
         """Reward function for the full hover controller."""
+        #SET THESE TO THE SAME AS THE ABOVE METHOD
+        MAX_VX = 35.0
+        MAX_VY = 35.0
 
         # Exercise 4b: Return a reward for hovering.
-
-        reward = 0
-
-        return reward
+        reward_ang = 1 - abs(angle) / math.pi
+        reward_vx = max(0.0, 1 - abs(vx) / MAX_VX)
+        reward_vy = max(0.0, 1 - abs(vy) / MAX_VY)
+        
+        return (reward_ang + reward_vx + reward_vy) 
 
     @staticmethod
     def discretize(value, nr_values, min_value, max_value):
