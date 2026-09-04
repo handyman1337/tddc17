@@ -19,3 +19,25 @@
 
 ### Question 3.
     The Q-table seems to be initialized with 0 at every position as each action gives 0 reward at the start of the simulator. So when we turn exploration off before learning starts, we basically ask the agent to always pick the highest Q-value even though all of them are 0. This results in the agent always picking action 0 and never turning the engines on, making the agent repeatedly fall to its death and never learning anything useful.
+
+
+## Part 3
+    
+### Hover State and Reward Functions
+
+    We first define the number of discrete states we want in each of the angle, vx and vy dimensions. We then set the minimum/maximum values for each of these dimensions that determines how the discretization should be done. For example we chose pi for MAX_ANGLE and 35.0 for MAX_VX and MAX_VY. pi for MAX_ANGLE means we cover the full circle of 2pi (±pi), while 35.0 were chosen empirically according to the velocity logs being printed when running the agent (vel 10-25 felt "average" so >35 was determined too high).
+    
+    We then divide the angle, vx and vy into discrete states by using discretize2() for angle (all discrete angles are equal) and discretize() for vx and vy (values under/over the min/max values are put in under-/overflow bins).
+
+    The reward functions are as following:
+    
+    The angle reward is 1 - abs(angle)/pi making the agent prefer angles close to 0 (pointing upwards) and avoiding angles larger than that (pointing to the sides or down).
+
+    The rewards for vx and vy are calculated as 1 - abs(v) / MAX_V and clipping to 0 if the result is negative. This works similarly to the reward function for the angle, meaning that v = 0 gives us the full reward of 1, while rewards v >= MAX_V gives us a reward of 0. This makes the agent learn to hover by only turning on the engines as needed in order to stay as still as possible.
+
+    In the end, the total reward returned from our hover reward function is the separate angle, vx and vy rewards added together.
+
+
+### How State Space Affected Learning
+    
+    At first we tried to use 10 angle states, and 5 states each for vx and vy. This lead us to having 10*5*5 = 250 states and in turn 250*4 = 1000 action-state pairs which gave good results but made learning quite slow. We then tested different variations of decreased number of states, e.g. lowering number of angle states to 5 and vx/vy states to 3/3 and 5/5. While this gave a decreased amount of action-state pairs, and therefore faster learning, it did not give good enough performance for us to be happy with the hovering. We therefore changed the number of states back up to 10 angle states and 5 states each for vx and vy which we started out with initially.
