@@ -24,8 +24,11 @@ class State:
 
     @property
     def score(self) -> int:
-        # TODO: Complete this method
-        return 0
+        """Heuristic of the state from player 0's POV.
+        
+        Positive values favor player 0, negative values favor player 1.
+        """
+        return self.pits[PLAYER_0_STORE] - self.pits[PLAYER_1_STORE]
 
     def next_state(self, pit):
         """
