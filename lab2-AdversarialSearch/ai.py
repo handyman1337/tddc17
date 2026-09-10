@@ -1,5 +1,6 @@
 import random
 
+from rich import print
 from game import AI, State, Objective
 from settings import DCOL_AI
 
@@ -31,8 +32,8 @@ class MinMax(AI):
         #The root is about to be expanded, so it counts as one expanded state
         MinMax.expanded_states = 1
         
-        utilities = {move: MinMax.minmax(state.next_state(move), MinMax.decrement(MinMax.max_depth))
-                     for move in available_moves}
+        utilities = [MinMax.minmax(state.next_state(move), MinMax.decrement(MinMax.max_depth))
+                        for move in available_moves]
         
         if objective == Objective.MAX:
             move = max(utilities, key=lambda m: utilities[m])
@@ -53,8 +54,8 @@ class MinMax(AI):
         
         MinMax.expanded_states += 1
         
-        utilities = {move: MinMax.minmax(state.next_state(move), MinMax.decrement(MinMax.max_depth))
-                             for move in available_moves}
+        utilities = [MinMax.minmax(state.next_state(move), MinMax.decrement(MinMax.max_depth))
+                        for move in available_moves]
         
         if state.current_player == 0:
             return max(utilities)
