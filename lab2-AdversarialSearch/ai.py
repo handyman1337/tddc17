@@ -35,14 +35,14 @@ class MinMax(AI):
                      for move in available_moves}
         
         if objective == Objective.MAX:
-            move = max(utilities, key=utilities.get)
+            move = max(utilities, key=lambda m: utilities[m])
         else:
-            move = min(utilities, key=utilities.get)
+            move = min(utilities, key=lambda m: utilities[m])
             
+        print(f"[{DCOL_AI}][AI] [white]MinMax: {MinMax.expanded_states} states expanded, "
+              f"utilities {utilities}, playing {move} for a utility of {utilities[move]}")
             
-        
-        glocken_is_gay = 0
-        return glocken_is_gay
+        return move
     
     @staticmethod
     def minmax(state: State, depth):
